@@ -19,7 +19,7 @@ SKSpy is genuinely a valuable accelerator solution, that can be leveraged in any
 - Supports Chrome, IE, Edge, Safari and Firefox
 - Can be leveraged across Java, C# and Python test automation frameworks
 
-# Open Source Available Features
+# Features in Open Source 
 - Capture unique identifier for all web applications
 - Capture objects using Chrome browser
 - Adding new pages
@@ -27,7 +27,7 @@ SKSpy is genuinely a valuable accelerator solution, that can be leveraged in any
 - Save file in *.Sky file format (Encrypted format)
 - Open existing project using *.Sky file
 
-## Full Version Available Features
+# Features in Full Version
 - Capture unique identifier for all Web and Mobile Applications
 - Capture objects using Chrome/Firefox/IE Edge/Safari
 - Capture objects using Mobile devices (Local & Cloud Farms)

@@ -38,6 +38,6 @@ iSpy is genuinely a valuable accelerator solution, that can be leveraged in any 
 - Generate POM for Web and Mobile (Web & Native) 
 - Enable Self-Healing for any Test Automation frameworks using *.sky file
 
-# Developed by UST Global Quality Engineering 
+# Developed by UST Quality Engineering 
 For more details, email to : assurance@ust.com
 

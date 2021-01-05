@@ -1,4 +1,4 @@
-# UST iSpy (Intelligent Spy)
+# UST iSpy (Intelligent Spy) - Open Source 
 iSpy open source source code repository 
 
 # Documentation 

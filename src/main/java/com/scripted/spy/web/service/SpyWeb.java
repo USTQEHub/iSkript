@@ -291,9 +291,9 @@ public class SpyWeb extends JFrame implements IconRepo {
 
 	private void drawElements() {
 		if(!isNewWindow) {
-			setTitle("iSpy - Web - " + this.project.getLocation().substring(0,this.project.getLocation().length()-1));
+			setTitle("UST iSpy - Web - " + this.project.getLocation().substring(0,this.project.getLocation().length()-1));
 		}else {
-		setTitle("iSpy - Web - " + this.project.getLocation());
+		setTitle("UST iSpy - Web - " + this.project.getLocation());
 		}
 		setIconImage(Toolkit.getDefaultToolkit().getImage(SpyWeb.class.getResource(AppConstants.LOGOPATH)));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -306,7 +306,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 				int event = windowEvent.getID();
-				int dialogButton = JOptionPane.showConfirmDialog(null, "Do you want to exit the iSpy?", "Confirm Exit",
+				int dialogButton = JOptionPane.showConfirmDialog(null, "Do you want to exit the UST iSpy?", "Confirm Exit",
 						JOptionPane.YES_NO_OPTION);
 				if (dialogButton == JOptionPane.YES_OPTION) {
 					int confirmOption = unsavedChangesValidation();
@@ -878,7 +878,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 		for (Map.Entry<String, Boolean> page : savedPages.entrySet()) {
 			System.out.println("Saved Pages Map: " + savedPages.toString());
 			if (null != pagesMap && null != pagesMap.get(page.getKey()) && !page.getValue()) {
-				int dialogButton = JOptionPane.showConfirmDialog(null, "Do you want to save the changes?", "iSpy",
+				int dialogButton = JOptionPane.showConfirmDialog(null, "Do you want to save the changes?", "UST iSpy",
 						JOptionPane.YES_NO_OPTION);
 				if (dialogButton == JOptionPane.YES_OPTION) {
 					saveObjects();
@@ -894,7 +894,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 		}
 		if (WebElementService.isFlagDelete() == true) {
 
-			int dialogButton = JOptionPane.showConfirmDialog(null, "Do you want to save the changes?", "iSpy",
+			int dialogButton = JOptionPane.showConfirmDialog(null, "Do you want to save the changes?", "UST iSpy",
 					JOptionPane.YES_NO_OPTION);
 			if (dialogButton == JOptionPane.YES_OPTION) {
 				saveObjects();
@@ -2130,7 +2130,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 				trPageExplorer.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("JTree")));
 				this.updateTree(this.trPageExplorer,
 						importService.parseToPagesData(project.getLocation(), project.getProjectName(), lblInfo, path));
-				this.setTitle("iSpy - Web - " + path.replace(File.separator+"objectrepo"+File.separator+chooser.getSelectedFile().getName(), ""));
+				this.setTitle("UST iSpy - Web - " + path.replace(File.separator+"objectrepo"+File.separator+chooser.getSelectedFile().getName(), ""));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -2140,7 +2140,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 	private void openDocs() {
 		URI uri = null;
 		try {
-			uri = new URI("https://ustrepo.github.io/iSpy");
+			uri = new URI("https://ustqe.github.io/IntelligentSpy");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			System.out.println("openDocs" + e.getMessage());

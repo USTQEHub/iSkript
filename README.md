@@ -2,7 +2,7 @@
 iSpy open source source code repository 
 
 # Documentation 
-https://ustrepo.github.io/iSpy/
+https://ustqe.github.io/IntelligentSpy/
 
 # About iSpy
 

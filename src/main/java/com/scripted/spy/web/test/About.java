@@ -72,7 +72,7 @@ public class About extends JFrame {
 		lblLogo.setIcon(IconRepo.ABOUTLOGO);
 		contentPane.add(lblLogo);
 		
-		JLabel lblAbout = new JLabel("UST iSpy - Web");
+		JLabel lblAbout = new JLabel("UST iSkript - Web");
 		lblAbout.setBounds(96, 23, 199, 28);
 		lblAbout.setFont(new Font(FONTNAME, Font.PLAIN, FONTSIZE));
 		lblAbout.setVisible(true);

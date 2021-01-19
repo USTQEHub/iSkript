@@ -152,7 +152,7 @@ public class ObjectSpyClient extends JFrame {
 	 * Create the frame.
 	 */
 	public ObjectSpyClient() {
-		setTitle("UST iSpy");
+		setTitle("UST iSkript");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 606, 340);
 		setBackground(Color.WHITE);

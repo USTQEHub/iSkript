@@ -40,6 +40,6 @@ iSkript is genuinely a valuable accelerator solution, that can be leveraged in a
 - Enable Self-Healing for any Test Automation frameworks using *.sky file
 - Support for Windows, Linux and Mac Operating systems
 
-# Developed by UST Quality Engineering 
+# Developed by UST Quality Engineering Team
 For more details, email to : assurance@ust.com
 

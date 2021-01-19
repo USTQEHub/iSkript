@@ -26,6 +26,7 @@ iSkript is genuinely a valuable accelerator solution, that can be leveraged in a
 - Highlight/delete added object
 - Save file in *.sky file format (Encrypted format)
 - Open existing project using *.sky file
+- Support for Windows Operating system (only)
 
 # Features in Full Version
 - Capture unique identifier for all Web and Mobile Applications
@@ -37,6 +38,7 @@ iSkript is genuinely a valuable accelerator solution, that can be leveraged in a
 - Generate POM classes for JAVA/C#/Python languages
 - Generate POM for Web and Mobile (Web & Native) 
 - Enable Self-Healing for any Test Automation frameworks using *.sky file
+- Support for Windows, Linux and Mac Operating systems
 
 # Developed by UST Quality Engineering 
 For more details, email to : assurance@ust.com

@@ -107,15 +107,18 @@ public class ChangeListener implements Runnable {
 				else {
 					SpyWeb.setFlagBrowser(false);
 					this.spyWeb.displayErroMessage("Browser is closed. Please launch new browser instance to add object");
+					SpyWeb.killDrivers();
 				}
 			} catch (NoSuchWindowException window) {
 				SpyWeb.setFlagBrowser(false);
 				this.spyWeb.displayErroMessage("Browser is closed. Please launch new browser instance to add object");
+				SpyWeb.killDrivers();
 			}
 
 		} catch (WebDriverException w) {
 			SpyWeb.setFlagBrowser(false);
 			this.spyWeb.displayErroMessage("Browser is closed. Please launch new browser instance to add object");
+			SpyWeb.killDrivers();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -145,5 +148,7 @@ public class ChangeListener implements Runnable {
 			}
 		}
 	}
+	
+	
 
 }

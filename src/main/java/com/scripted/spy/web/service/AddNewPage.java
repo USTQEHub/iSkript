@@ -135,6 +135,10 @@ public class AddNewPage {
 						errorBox.setBounds(30, 35, 500, 23);
 						displayErroMessage("You can enter only a maximum of 25 characters");
 						flagNewPage=false;
+					}else if (isObjectNameContainSpace(pageName)){
+						errorBox.setBounds(30, 35, 500, 23);
+						displayErroMessage("Please remove white spaces in page name");
+						flagNewPage=false;
 					}else {
 						boolean flagDuplicate=false;
 						Map<String, Map<String, Attribute>> pageMap = SpyWeb.getPagesMap();
@@ -247,5 +251,11 @@ public class AddNewPage {
 		if (b)
 		   System.out.println("There is a special character in my string");
 		return b;
+	}
+	public boolean isObjectNameContainSpace(String objectName) {
+		Pattern pattern = Pattern.compile("\\s");
+		Matcher matcher = pattern.matcher(objectName);
+		boolean found = matcher.find();
+		return found;
 	}
 }

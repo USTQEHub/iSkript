@@ -41,6 +41,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.swing.ButtonGroup;
@@ -286,6 +288,12 @@ public class SpyWeb extends JFrame implements IconRepo {
 			trPageExplorer.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("JTree")));
 			this.updateTree(this.trPageExplorer, importService.parseToPagesData(project.getLocation(),
 					project.getProjectName(), lblInfo, project.getImportFileLocation()));
+			for ( String key : pagesMap.keySet() ) {
+			    System.out.println("page name :"+ key );
+			    attributeMap = new HashMap<>();
+			    System.out.println("Entry Map:"+attributeMap);
+				fillAttributesData(attributeMap, key);
+			}		
 		}
 	}
 
@@ -435,7 +443,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 			public void actionPerformed(ActionEvent e) {
 				if (trPageExplorer.getSelectionCount() == AppConstants.NOSELECTION)
 					return;
-				addAttributesData(null, trPageExplorer, sPaneAttributes, driver1);
+				addAttributesData(trPageExplorer, sPaneAttributes, driver1);
 
 			}
 		});
@@ -448,7 +456,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 			public void actionPerformed(ActionEvent e) {
 				if (trPageExplorer.getSelectionCount() == AppConstants.NOSELECTION)
 					return;
-				addAttributesData(null, trPageExplorer, sPaneAttributes, driver1);
+				addAttributesData(trPageExplorer, sPaneAttributes, driver1);
 			}
 		});
 		locatorGroup.add(rdBtnXPath);
@@ -459,7 +467,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 			public void actionPerformed(ActionEvent e) {
 				if (trPageExplorer.getSelectionCount() == AppConstants.NOSELECTION)
 					return;
-				addAttributesData(null, trPageExplorer, sPaneAttributes, driver1);
+				addAttributesData(trPageExplorer, sPaneAttributes, driver1);
 			}
 		});
 		locatorGroup.add(rdBtnAttr);
@@ -501,12 +509,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 
 			}
 		});
-		trPageExplorer.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent me) {
-				addAttributesData(me, trPageExplorer, sPaneAttributes, driver1);
-			}
-		});
-
+		trPageExplorer.addTreeSelectionListener(e -> addAttributesData(trPageExplorer, sPaneAttributes, driver1));
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(21, 84, 351, 204);
 		scrollPane.setViewportView(trPageExplorer);
@@ -941,7 +944,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 		System.out.println("Entering!");
 	}
 
-	void addAttributesData(MouseEvent me, JTree tree, JScrollPane scrollPane, WebDriver driver1) {
+	void addAttributesData(JTree tree, JScrollPane scrollPane, WebDriver driver1) {
 		AttributeTableModel model = new AttributeTableModel();
 		attributeMap = new HashMap<>();
 		System.out.println("Attribute Map: " + attributeMap.toString());
@@ -1269,7 +1272,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 					model.reload(child);
 					TreePath path = new TreePath(child.getPath());
 					tree.setSelectionPath(path);
-					addAttributesData(null, trPageExplorer, sPaneAttributes, driver1);
+					addAttributesData(trPageExplorer, sPaneAttributes, driver1);
 					txtObjectName.setText("");
 					tblAttributes.setModel(new DefaultTableModel());
 				}
@@ -1478,6 +1481,20 @@ public class SpyWeb extends JFrame implements IconRepo {
 					.getPopupMessageScript("The object name already exists. Please enter a new name", ERROR));
 			System.out.println(name + " Object already exist.");
 			return null;
+		}
+		if(isObjectNameContainSpace(name))
+		{
+			js.executeScript(scriptingService
+					.getPopupMessageScript("Please remove the white spaces in object name", ERROR));
+			System.out.println(name + " Object has space.");
+			return null;
+		}
+		if(isObjectNameValid(attribute.getNodename()))
+		{
+			js.executeScript(scriptingService
+					.getPopupMessageScript("Please remove special characters/numbers", ERROR));
+			return null;
+			
 		}
 		boolean flagIframe = false;
 		if (attribute.getIframeElement() != null) {
@@ -2201,5 +2218,19 @@ public class SpyWeb extends JFrame implements IconRepo {
 		return (OS.indexOf("win") >= 0);
 
 	}
-
+	public boolean isObjectNameContainSpace(String objectName) {
+		Pattern pattern = Pattern.compile("\\s");
+		Matcher matcher = pattern.matcher(objectName);
+		boolean found = matcher.find();
+		return found;
+	}
+	public boolean isObjectNameValid(String objectName) {
+		Pattern p = Pattern.compile("[^a-zA-Z ]", Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(objectName);
+		boolean b = m.find();
+		System.out.println("Flag :" + b);
+		if (b)
+			System.out.println("There is a special character in my string");
+		return b;
+	}
 }

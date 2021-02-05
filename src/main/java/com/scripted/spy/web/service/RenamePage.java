@@ -128,7 +128,11 @@ public class RenamePage {
 					} else if (NewPageName.length() >= AppConstants.PAGENAMELIMIT) {
 						errorBox.setBounds(30, 35, 500, 23);
 						displayErroMessage("You can enter only a maximum of 25 characters");
-					} else if (NewPageName.equalsIgnoreCase(oldPageName.trim())) {
+					} else if(isObjectNameContainSpace(NewPageName))
+					{
+						errorBox.setBounds(30, 35, 500, 23);
+						displayErroMessage("Please remove the white spaces in page name");
+					}else if (NewPageName.equalsIgnoreCase(oldPageName.trim())) {
 						if(NewPageName.equals(oldPageName.trim())) {
 							JComponent comp = (JComponent) e.getSource();
 							Window win = SwingUtilities.getWindowAncestor(comp);
@@ -252,5 +256,11 @@ public class RenamePage {
 		if (b)
 			System.out.println("There is a special character in my string");
 		return b;
+	}
+	public boolean isObjectNameContainSpace(String objectName) {
+		Pattern pattern = Pattern.compile("\\s");
+		Matcher matcher = pattern.matcher(objectName);
+		boolean found = matcher.find();
+		return found;
 	}
 }

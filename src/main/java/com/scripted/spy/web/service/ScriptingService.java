@@ -2646,7 +2646,7 @@ public class ScriptingService {
 			"\r\n" + 
 			"            addStyle(\"input#SkMate_PopUp_CodeIDText {             display:table-cell;             width:95%;          }\");\r\n" + 
 			"\r\n" + 
-			"            addStyle(\"span#SkMate_PopUp_CloseButton {              display:table-cell;-moz-border-radius:4px;-webkit-border-radius: 4px;-o-border-radius:4px;border-radius:4px;border:1px solid #ccc;color: white;background-color:#980000;cursor:pointer;font-size:9pt;padding:3px 1px;font-weight: bold;position:absolute;right:0px;top:13px;}\");\r\n" + 
+			"            addStyle(\"span#SkMate_PopUp_CloseButton {              display:table-cell;-moz-border-radius:4px;-webkit-border-radius: 4px;-o-border-radius:4px;border-radius:4px;border:1px solid #ccc;color: white;background-color:#980000;cursor:pointer;font-size:10pt;padding:3px 1px;font-weight: bold;position:relative;right:0px;top:0px;}\");\r\n" + 
 			"\r\n" + 
 			"            addStyle(\"div#SkMate_PopUp {             display:block;           }           div#SkMate_PopUp_Element_Name {             display:table;             width: 100%;           }\");\r\n" + 
 			"\r\n" + 
@@ -2809,7 +2809,7 @@ public class ScriptingService {
 			"\r\n" + 
 			"    addStyle(\"input#SkMate_PopUp_CodeIDText {             display:table-cell;             width:95%;          }\");\r\n" + 
 			"\r\n" + 
-			"    addStyle(\"span#SkMate_PopUp_CloseButton {              display:table-cell;-moz-border-radius:4px;-webkit-border-radius: 4px;-o-border-radius:4px;border-radius:4px;border:1px solid #ccc;color: white;background-color:#980000;cursor:pointer;font-size:9pt;padding:0px 1px;font-weight: bold;position:absolute;right:3px;top:8px;}\");\r\n" + 
+			"    addStyle(\"span#SkMate_PopUp_CloseButton {              display:table-cell;-moz-border-radius:4px;-webkit-border-radius: 4px;-o-border-radius:4px;border-radius:4px;border:1px solid #ccc;color: white;background-color:#980000;cursor:pointer;font-size:9pt;padding:0px 1px;font-weight: bold;position:relative;right:0px;top:0px;}\");\r\n" + 
 			"\r\n" + 
 			"    addStyle(\"div#SkMate_PopUp {             display:block;           }           div#SkMate_PopUp_Element_Name {             display:table;             width: 100%;           }\");\r\n" + 
 			"\r\n" + 

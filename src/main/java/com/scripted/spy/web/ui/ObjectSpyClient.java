@@ -270,10 +270,7 @@ public class ObjectSpyClient extends JFrame {
 
 				File objRepo = new File(
 						projectLocation + File.separator + RepositoryConstants.OBJECTREPOSITORY.getValue());
-				File pageObjRepo = new File(
-						projectLocation + File.separator + RepositoryConstants.PAGEOBJECTREPOSITORY.getValue());
 				objRepo.mkdir();
-				pageObjRepo.mkdir();
 				projectPath = projectLocation + File.separator + RepositoryConstants.OBJECTREPOSITORY.getValue();
 
 			}

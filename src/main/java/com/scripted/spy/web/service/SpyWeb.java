@@ -66,6 +66,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -293,7 +294,8 @@ public class SpyWeb extends JFrame implements IconRepo {
 			    attributeMap = new HashMap<>();
 			    System.out.println("Entry Map:"+attributeMap);
 				fillAttributesData(attributeMap, key);
-			}		
+				
+			}	
 		}
 	}
 
@@ -509,7 +511,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 
 			}
 		});
-		trPageExplorer.addTreeSelectionListener(e -> addAttributesData(trPageExplorer, sPaneAttributes, driver1));
+		trPageExplorer.addTreeSelectionListener(e -> addSingleAttributesData(trPageExplorer, sPaneAttributes, driver1));
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(21, 84, 351, 204);
 		scrollPane.setViewportView(trPageExplorer);
@@ -943,7 +945,264 @@ public class SpyWeb extends JFrame implements IconRepo {
 	private void generateObjectBasedXpath() {
 		System.out.println("Entering!");
 	}
+void addSingleAttributesData(JTree tree, JScrollPane scrollPane, WebDriver driver1) {
 
+	    rdBtnLocators.setSelected(true);
+		AttributeTableModel model = new AttributeTableModel();
+		attributeMap = new HashMap<>();
+		System.out.println("Attribute Map: " + attributeMap.toString());
+		TreePath tp = tree.getSelectionPath();
+		//System.out.println(tree.getSelectionPath().getLastPathComponent());
+		tblAttributes.setCellSelectionEnabled(false);
+		ButtonGroup bg = new ButtonGroup();
+		ListSelectionModel cellSelectionModel = tblAttributes.getSelectionModel();
+		String pageData = "";
+		String objectData = "";
+		if (tp != null) {
+			if (tp.getParentPath().toString().contains("JTree") && tp.getParentPath().toString().contains(",")) {
+				String selectedPageName = getSelectedPage(tp.getParentPath().toString());
+				fillsingleAttributesData(attributeMap, selectedPageName.trim(),tree);
+				List<Object[]> attributesData = attributeMap.get(tp.getLastPathComponent().toString());
+				if (null != attributesData) {
+					for (Object[] o : attributesData) {
+						model.addRow(o);
+						tblAttributes.setModel(model);
+						TableColumnModel columnModel = tblAttributes.getColumnModel();
+						columnModel.getColumn(0).setPreferredWidth(50);
+						columnModel.getColumn(1).setWidth(500);
+						scrollPane.setViewportView(tblAttributes);
+					}
+					if (!rdBtnAttr.isSelected()) {
+						tblAttributes.getColumn("Attribute").setCellRenderer(new RadioButtonRenderer());
+						tblAttributes.getColumn("Attribute").setCellEditor(new RadioButtonEditor(new JCheckBox()));
+					}
+
+				} else {
+					tblAttributes.setModel(new AttributeTableModel());
+					tblAttributes.repaint();
+				}
+				pageData = tp.getParentPath().toString();
+				pageData = pageData.replace("JTree", "");
+				pageData = pageData.replace(",", "");
+				pageData = pageData.replace("[", "");
+				pageData = pageData.replace("]", "");
+				objectData = tp.getLastPathComponent().toString();
+				txtObjectName.setEditable(false);
+			} else if (tp.getParentPath().toString().contains("JTree")) {
+				pageData = tp.getLastPathComponent().toString();
+				txtObjectName.setEditable(false);
+				tblAttributes.setModel(new DefaultTableModel());
+			}
+			txtPageName.setText(pageData);
+			System.out.println("pagedata is " + pageData);
+			// txtURL.setText(project.getPageUrl());
+			System.out.println("jtree url is " + project.getPageUrl());
+		}
+		txtObjectName.setText(objectData);
+	
+	}
+private void fillsingleAttributesData(Map<String, List<Object[]>> attributeMap, String selectedPageName, JTree tree) {
+
+	System.out.println("Selected page name: " + selectedPageName);
+	objAttrMap = pagesMap.get(selectedPageName);
+	System.out.println("Pages Map: " + pagesMap.toString());
+	System.out.println("Object Map: " + objAttrMap.toString());
+	String ngLocatorKey = null;
+	LocatorSelectionListener selectionListener = new LocatorSelectionListener(trPageExplorer, pagesMap,
+			attributeKey, attributeValue);
+	String objname=tree.getSelectionPath().getLastPathComponent().toString();
+		Attribute attr = objAttrMap.get(objname);
+		System.out.println("obj name :"+objname);
+		JRadioButton rdBtnId = new JRadioButton("ID");
+		JRadioButton rdBtnName = new JRadioButton("Name");
+		JRadioButton rdBtnClassname = new JRadioButton("Classname");
+		JRadioButton rdBtnCss = new JRadioButton("CSS");
+		JRadioButton rdBtnXpath = new JRadioButton("XPath");
+		JRadioButton rdBtnPosition = new JRadioButton("Position");
+		JRadioButton rdBtnIframe = new JRadioButton("IFrame");
+		rdBtnIframe.setEnabled(false);
+		JRadioButton ngLocator = null;
+		rdBtnId.addActionListener(selectionListener);
+		rdBtnName.addActionListener(selectionListener);
+		rdBtnClassname.addActionListener(selectionListener);
+		rdBtnCss.addActionListener(selectionListener);
+		rdBtnXpath.addActionListener(selectionListener);
+		rdBtnPosition.addActionListener(selectionListener);
+		rdBtnIframe.addActionListener(selectionListener);
+
+		if (null != attr.getAttributes() && null != attr.getAttributes().get("ng-model")) {
+			ngLocator = new JRadioButton("Ng-model");
+			ngLocatorKey = "ng-model";
+			ngLocator.addActionListener(selectionListener);
+		} else if (null != attr.getAttributes() && null != attr.getAttributes().get("buttontext")) {
+			ngLocator = new JRadioButton("Buttontext");
+			ngLocatorKey = "buttontext";
+			ngLocator.addActionListener(selectionListener);
+		} else if (null != attr.getAttributes() && null != attr.getAttributes().get("ng-bind")) {
+			ngLocator = new JRadioButton("Ng-bind");
+			ngLocatorKey = "ng-bind";
+			ngLocator.addActionListener(selectionListener);
+		}
+		// selectedKey = selectedLocatorMap.get(entry.getKey());
+		if (null != attr.getSelectorValue() && !attr.getSelectorValue().isEmpty()) {
+			System.out.println("Already selected Value: " + attr.getSelectorMethod());
+			System.out.println(
+					"Selector Method:" + attr.getSelectorMethod() + "Selector value:" + attr.getSelectorValue());
+			// selectedKey.setSelected(true);
+			// System.out.println("selected value: " +
+			// attr.getSelectedLocator().get("attribute"));
+			if (attr.getSelectorMethod().equalsIgnoreCase("Xpath")) {
+				rdBtnXpath.setSelected(true);
+			}
+			// System.out.println("given :"+attr.getClassname());
+			if (attr.getSelectorMethod().equalsIgnoreCase("ID")) {
+				rdBtnId.setSelected(true);
+			} else if (attr.getSelectorMethod().equalsIgnoreCase("Name")) {
+				rdBtnName.setSelected(true);
+			} else if (attr.getSelectorMethod().equalsIgnoreCase("Classname")) {
+				rdBtnClassname.setSelected(true);
+			} else if (attr.getSelectorMethod().equalsIgnoreCase("CSS")) {
+				rdBtnCss.setSelected(true);
+			} else if (attr.getSelectorMethod().equalsIgnoreCase("IFrame")) {
+				rdBtnIframe.setSelected(false);
+			} else if (attr.getSelectorMethod().equalsIgnoreCase("ng-model")
+					|| attr.getSelectorMethod().equalsIgnoreCase("ng-bind")
+					|| attr.getSelectorMethod().equalsIgnoreCase("buttontext")) {
+				ngLocator.setSelected(true);
+			} else {
+				JRadioButton xpathButton = new JRadioButton(StringUtils.capitalize(attr.getSelectorMethod()));
+				xpathButton.setSelected(true);
+
+			}
+		} else {
+			if (null != attr && StringUtils.isNotBlank(attr.getId())) {
+				System.out.println("ID: " + attr.getId());
+				rdBtnId.setSelected(true);
+				attr.setSelectorMethod("ID");
+				attr.setSelectorValue(attr.getId());
+			} else if (StringUtils.isNotBlank(attr.getAttributes().get(ngLocatorKey))) {
+				ngLocator.setSelected(true);
+				attr.setSelectorMethod(ngLocatorKey);
+				attr.setSelectorValue(attr.getAttributes().get(ngLocatorKey));
+			} else if (StringUtils.isNotBlank(attr.getXpath())) {
+				rdBtnXpath.setSelected(true);
+				attr.setSelectorMethod("XPath");
+				attr.setSelectorValue(attr.getXpath());
+			} else if (StringUtils.isNotBlank(attr.getIframeElement())) {
+				rdBtnXpath.setSelected(false);
+				attr.setSelectorMethod("IFrame");
+				attr.setSelectorValue(attr.getIframeElement());
+			} else {
+				rdBtnCss.setSelected(true);
+				attr.setSelectorMethod("CSS");
+				attr.setSelectorValue(attr.getCss());
+
+			}
+		}
+
+		List<Object[]> attributes = new ArrayList<>();
+		ButtonGroup primeLocatorGroup = new ButtonGroup();
+		primeLocatorGroup.add(rdBtnId);
+		primeLocatorGroup.add(rdBtnName);
+		primeLocatorGroup.add(rdBtnClassname);
+		primeLocatorGroup.add(rdBtnCss);
+		primeLocatorGroup.add(rdBtnXpath);
+		primeLocatorGroup.add(rdBtnPosition);
+		primeLocatorGroup.add(ngLocator);
+		primeLocatorGroup.add(rdBtnIframe);
+
+		if (rdBtnLocators.isSelected()) {
+			btnHighlight.setEnabled(true);
+			btnHighlight.setBackground(Color.decode(ColorCode.HAPPYBUTTON.getCode()));
+			if (attr.getId().isEmpty()) {
+				attributes.add(new Object[] { rdBtnId, attr.getId() });
+				rdBtnId.setEnabled(false);
+			} else {
+				attributes.add(new Object[] { rdBtnId, attr.getId() });
+			}
+			if (attr.getAttributes().get("name") == null) {
+				attributes.add(new Object[] { rdBtnName, attr.getAttributes().get("name") });
+				rdBtnName.setEnabled(false);
+			} else {
+				attributes.add(new Object[] { rdBtnName, attr.getAttributes().get("name") });
+			}
+			if (attr.getClassname().isEmpty()) {
+				attributes.add(new Object[] { rdBtnClassname, attr.getClassname() });
+				rdBtnClassname.setEnabled(false);
+			} else {
+				attributes.add(new Object[] { rdBtnClassname, attr.getClassname() });
+			}
+			if (attr.getCss().isEmpty()) {
+				attributes.add(new Object[] { rdBtnCss, attr.getCss() });
+				rdBtnCss.setEnabled(false);
+			} else {
+				attributes.add(new Object[] { rdBtnCss, attr.getCss() });
+			}
+			if (attr.getXpath().isEmpty()) {
+				attributes.add(new Object[] { rdBtnXpath, attr.getXpath() });
+				rdBtnXpath.setEnabled(false);
+			} else {
+				attributes.add(new Object[] { rdBtnXpath, attr.getXpath() });
+			}
+
+			attributes.add(new Object[] { rdBtnIframe, attr.getIframeElement() });
+
+			if (null != ngLocator)
+				attributes.add(new Object[] { ngLocator, attr.getAttributes().get(ngLocatorKey) });
+		}
+
+		if (rdBtnXPath.isSelected()) {
+			btnHighlight.setEnabled(true);
+			btnHighlight.setBackground(Color.decode(ColorCode.HAPPYBUTTON.getCode()));
+			for (Map.Entry<String, String> a : attr.getXpaths().entrySet()) {
+				// if (a.getKey().startsWith("ng")) {
+				System.out.println("Key: " + StringUtils.capitalize(a.getKey()));
+				JRadioButton xpathButton = new JRadioButton(
+						StringUtils.capitalize(a.getKey().replace("XPath:", "")));
+				xpathButton.addActionListener(selectionListener);
+				System.out.println("Selected Key: " + selectedKey);
+				if (null != attr.getSelectorMethod() && attr.getSelectorMethod().equalsIgnoreCase(a.getKey())) {
+					xpathButton.setSelected(true);
+				}
+				primeLocatorGroup.add(xpathButton);
+				if (a.getValue() == null || a.getValue() == "") {
+
+				} else {
+
+					attributes.add(new Object[] { xpathButton, a.getValue() });
+				}
+			}
+		}
+
+		if (rdBtnAttr.isSelected()) {
+			btnHighlight.setEnabled(false);
+			btnHighlight.setBackground(Color.decode("#bbbfbf"));
+			Set<String> filteredAttributes = new HashSet<>();
+			filteredAttributes.add("id");
+			filteredAttributes.add("name");
+			filteredAttributes.add("class");
+			filteredAttributes.add("ng-model");
+			filteredAttributes.add("buttontext");
+			filteredAttributes.add("ng-bind");
+			Map<String, String> filteredPropertyMap = attr.getAttributes().entrySet().stream()
+					.filter(ent -> !filteredAttributes.contains(ent.getKey()))
+					.collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
+			for (Map.Entry<String, String> a : filteredPropertyMap.entrySet()) {
+				JRadioButton xpathButton = new JRadioButton(StringUtils.capitalize(a.getKey()));
+				xpathButton.addActionListener(selectionListener);
+				System.out.println("Key: " + StringUtils.capitalize(a.getKey()));
+				primeLocatorGroup.add(xpathButton);
+				if (StringUtils.isNotBlank(a.getValue()))
+					attributes.add(new Object[] { xpathButton.getText(), a.getValue() });
+			}
+		}
+		attributeMap.put(objname, attributes);
+		System.out.println("Table Data: " + attributeMap.toString());
+	
+
+
+	
+}
 	void addAttributesData(JTree tree, JScrollPane scrollPane, WebDriver driver1) {
 		AttributeTableModel model = new AttributeTableModel();
 		attributeMap = new HashMap<>();
@@ -1265,7 +1524,7 @@ public class SpyWeb extends JFrame implements IconRepo {
 						.getLastPathComponent();
 				System.out.println("Selected Page Name in the Explorer:  " + selectedPage);
 				DefaultMutableTreeNode child = new DefaultMutableTreeNode(
-						attribute.getTagName().toLowerCase() + "_" + attribute.getNodename());
+						tagname.toLowerCase() + "_" + attribute.getNodename());
 				System.out.println("Element is Available in the selected page: " + selectedPage.isNodeChild(child));
 				if (!selectedPage.isNodeChild(child)) {
 					model.insertNodeInto(child, selectedPage, selectedPage.getChildCount());
@@ -1276,9 +1535,12 @@ public class SpyWeb extends JFrame implements IconRepo {
 					txtObjectName.setText("");
 					tblAttributes.setModel(new DefaultTableModel());
 				}
+				((DefaultTreeModel)tree.getModel()).reload();
 				tree.setSelectionPath(new TreePath(selectedPage.getPath()));
 				model.reload(selectedPage);
 				tree.setFocusable(true);
+				tree.expandPath(new TreePath(selectedPage.getPath()));
+				
 			} else {
 				displayErroMessage("Please Create/Select a Page");
 			}

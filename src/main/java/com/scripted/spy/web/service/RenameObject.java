@@ -124,7 +124,12 @@ public class RenameObject {
 					if (NewObjectName.length() >= AppConstants.OBJECTNAMELIMIT) {
 						errorBox.setBounds(30, 35, 500, 23);
 						displayErroMessage("You can enter only a maximum of 15 characters");
-					} else if (NewObjectName.equalsIgnoreCase(oldObjectName.trim())) {
+					} else if (isObjectNameValid(NewObjectName)) {
+						txtFileName.setBorder(redBorder);
+						errorBox.setBounds(50, 35, 500, 23);
+						displayErroMessage("Please remove special characters/numbers");
+
+					}else if (NewObjectName.equalsIgnoreCase(remainingVal.trim())) {
 						JComponent comp = (JComponent) e.getSource();
 						Window win = SwingUtilities.getWindowAncestor(comp);
 						win.dispose();
@@ -139,7 +144,7 @@ public class RenameObject {
 							Attribute value = obj.getValue();
 							System.out.println("key :" + key);
 							System.out.println("Value :" + value);
-							if (key.equalsIgnoreCase(NewObjectName)) {
+							if (key.equalsIgnoreCase(oldObjectName)) {
 								errorBox.setBounds(15, 35, 500, 23);
 								displayErroMessage("Object name already exists. Please enter a new name");
 								flagDuplicate = true;
